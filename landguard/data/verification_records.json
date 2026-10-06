@@ -1,0 +1,160 @@
+[
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "rule_code": "OWNER_MATCH",
+    "status": "PASS",
+    "severity": "INFO",
+    "message": "Ownership evidence supports all approved transfers.",
+    "evidence_reference": [
+      {
+        "source": "MOCK_REGISTRATION",
+        "record_type": "DEED",
+        "reference": "TXN-000001",
+        "fields": {
+          "seller_reference": "DEMO-ID-000001",
+          "buyer_reference": "DEMO-ID-000011",
+          "transferred_area_decimal": 4.0
+        }
+      },
+      {
+        "source": "KHATIAN",
+        "record_type": "OWNERSHIP",
+        "reference": "LG-BD-DHK-SAV-000001",
+        "fields": {
+          "owners": [
+            {
+              "identifier": "DEMO-ID-000001",
+              "name": "Rahim Ahmed",
+              "share_percent": 60
+            },
+            {
+              "identifier": "DEMO-ID-000002",
+              "name": "Karim Hasan",
+              "share_percent": 40
+            }
+          ]
+        }
+      }
+    ],
+    "transaction_id": null,
+    "details": {},
+    "snapshot_at": "2026-10-06T05:07:44+00:00",
+    "updated_at": "2026-10-06T05:07:44+00:00"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "rule_code": "AREA_MATCH",
+    "status": "PASS",
+    "severity": "INFO",
+    "message": "Parcel area is consistent with Khatian and GIS evidence.",
+    "evidence_reference": [
+      {
+        "source": "KHATIAN",
+        "record_type": "AREA",
+        "reference": "817",
+        "fields": {
+          "khatian_area_decimal": 10.0
+        }
+      },
+      {
+        "source": "MOCK_GIS",
+        "record_type": "AREA",
+        "reference": "1524",
+        "fields": {
+          "gis_area_decimal": 10.0
+        }
+      }
+    ],
+    "transaction_id": null,
+    "details": {},
+    "snapshot_at": "2026-10-06T05:07:44+00:00",
+    "updated_at": "2026-10-06T05:07:44+00:00"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "rule_code": "DEED_MUTATION_AREA_MATCH",
+    "status": "PASS",
+    "severity": "INFO",
+    "message": "Deed and mutation transferred areas agree for all approved transfers.",
+    "evidence_reference": [
+      {
+        "source": "MOCK_MUTATION",
+        "record_type": "MUTATION",
+        "reference": "MUT-DHK-SAV-001",
+        "fields": {
+          "matched": 1
+        }
+      }
+    ],
+    "transaction_id": null,
+    "details": {},
+    "snapshot_at": "2026-10-06T05:07:44+00:00",
+    "updated_at": "2026-10-06T05:07:44+00:00"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "rule_code": "PARCEL_AREA_OVERFLOW",
+    "status": "PASS",
+    "severity": "INFO",
+    "message": "Recorded transfers total 4.0000 decimal; parcel area is 10.0000 decimal.",
+    "evidence_reference": [
+      {
+        "source": "PARCEL",
+        "record_type": "AREA",
+        "reference": "LG-BD-DHK-SAV-000001",
+        "fields": {
+          "parcel_area_decimal": 10.0
+        }
+      },
+      {
+        "source": "MOCK_REGISTRATION",
+        "record_type": "DEED",
+        "reference": "TXN-000001",
+        "fields": {
+          "transferred_area_decimal": 4.0,
+          "status": "APPROVED"
+        }
+      }
+    ],
+    "transaction_id": null,
+    "details": {},
+    "snapshot_at": "2026-10-06T05:07:44+00:00",
+    "updated_at": "2026-10-06T05:07:44+00:00"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "rule_code": "DUPLICATE_TRANSFER",
+    "status": "PASS",
+    "severity": "INFO",
+    "message": "No conflicting overlapping active transfers detected.",
+    "evidence_reference": [],
+    "transaction_id": null,
+    "details": {},
+    "snapshot_at": "2026-10-06T05:07:44+00:00",
+    "updated_at": "2026-10-06T05:07:44+00:00"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "rule_code": "MISSING_MUTATION",
+    "status": "PASS",
+    "severity": "INFO",
+    "message": "All approved transfers have a corresponding mutation record.",
+    "evidence_reference": [],
+    "transaction_id": null,
+    "details": {},
+    "snapshot_at": "2026-10-06T05:07:44+00:00",
+    "updated_at": "2026-10-06T05:07:44+00:00"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "rule_code": "DOCUMENT_INTEGRITY",
+    "status": "PASS",
+    "severity": "INFO",
+    "message": "Document integrity verified for 1 document(s).",
+    "evidence_reference": [],
+    "transaction_id": null,
+    "details": {},
+    "snapshot_at": "2026-10-06T05:07:44+00:00",
+    "updated_at": "2026-10-06T05:07:44+00:00"
+  }
+]

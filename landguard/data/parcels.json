@@ -1,0 +1,243 @@
+[
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000001",
+    "scenario_tag": "CLEAN",
+    "district": "Dhaka",
+    "upazila": "Savar",
+    "mouza": "Birulia",
+    "sheet_no": "01",
+    "dag_no": "1524",
+    "khatian_no": "817",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 10.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000001", "name": "Rahim Ahmed", "share_percent": 60},
+      {"identifier": "DEMO-ID-000002", "name": "Karim Hasan", "share_percent": 40}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.350,23.820],[90.351,23.820],[90.351,23.821],[90.350,23.821],[90.350,23.820]]]},
+    "khatian_area_decimal": 10.00,
+    "gis_area_decimal": 10.00,
+    "created_at": "2020-01-15",
+    "updated_at": "2024-05-01"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000002",
+    "scenario_tag": "CLEAN",
+    "district": "Dhaka",
+    "upazila": "Savar",
+    "mouza": "Birulia",
+    "sheet_no": "01",
+    "dag_no": "1525",
+    "khatian_no": "818",
+    "land_type": "AGRICULTURAL",
+    "area_decimal": 5.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000003", "name": "Nusrat Jahan", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.355,23.825],[90.356,23.825],[90.356,23.826],[90.355,23.826],[90.355,23.825]]]},
+    "khatian_area_decimal": 5.00,
+    "gis_area_decimal": 5.00,
+    "created_at": "2020-02-10",
+    "updated_at": "2023-11-20"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000003",
+    "scenario_tag": "CLEAN",
+    "district": "Dhaka",
+    "upazila": "Savar",
+    "mouza": "Hemayetpur",
+    "sheet_no": "02",
+    "dag_no": "210",
+    "khatian_no": "430",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 3.50,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000010", "name": "Tanvir Hossain", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.360,23.830],[90.361,23.830],[90.361,23.831],[90.360,23.831],[90.360,23.830]]]},
+    "khatian_area_decimal": 3.50,
+    "gis_area_decimal": 3.50,
+    "created_at": "2021-03-05",
+    "updated_at": "2024-01-10"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-GAZ-000004",
+    "scenario_tag": "AREA-MISMATCH",
+    "district": "Dhaka",
+    "upazila": "Gazipur",
+    "mouza": "Pubail",
+    "sheet_no": "03",
+    "dag_no": "102",
+    "khatian_no": "511",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 10.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000001", "name": "Rahim Ahmed", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.400,23.990],[90.401,23.990],[90.401,23.991],[90.400,23.991],[90.400,23.990]]]},
+    "khatian_area_decimal": 10.00,
+    "gis_area_decimal": 10.00,
+    "created_at": "2019-07-12",
+    "updated_at": "2024-02-18"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-NAR-000005",
+    "scenario_tag": "OWNER-MISMATCH",
+    "district": "Dhaka",
+    "upazila": "Narayanganj",
+    "mouza": "Siddhirganj",
+    "sheet_no": "04",
+    "dag_no": "88",
+    "khatian_no": "215",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 6.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000001", "name": "Rahim Ahmed", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.500,23.700],[90.501,23.700],[90.501,23.701],[90.500,23.701],[90.500,23.700]]]},
+    "khatian_area_decimal": 6.00,
+    "gis_area_decimal": 6.00,
+    "created_at": "2018-09-01",
+    "updated_at": "2023-12-01"
+  },
+  {
+    "parcel_id": "LG-BD-CTG-PAH-000006",
+    "scenario_tag": "DOUBLE-TRANSFER",
+    "district": "Chattogram",
+    "upazila": "Pahartali",
+    "mouza": "Pahartali",
+    "sheet_no": "05",
+    "dag_no": "305",
+    "khatian_no": "742",
+    "land_type": "AGRICULTURAL",
+    "area_decimal": 10.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000001", "name": "Rahim Ahmed", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[91.780,22.320],[91.781,22.320],[91.781,22.321],[91.780,22.321],[91.780,22.320]]]},
+    "khatian_area_decimal": 10.00,
+    "gis_area_decimal": 10.00,
+    "created_at": "2019-04-20",
+    "updated_at": "2024-03-15"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-GAZ-000007",
+    "scenario_tag": "AREA-OVERFLOW",
+    "district": "Dhaka",
+    "upazila": "Gazipur",
+    "mouza": "Kaliakair",
+    "sheet_no": "06",
+    "dag_no": "445",
+    "khatian_no": "990",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 10.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000003", "name": "Nusrat Jahan", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.420,24.000],[90.421,24.000],[90.421,24.001],[90.420,24.001],[90.420,24.000]]]},
+    "khatian_area_decimal": 10.00,
+    "gis_area_decimal": 10.00,
+    "created_at": "2020-08-08",
+    "updated_at": "2024-04-22"
+  },
+  {
+    "parcel_id": "LG-BD-CHI-SAV-000008",
+    "scenario_tag": "MISSING-MUTATION",
+    "district": "Dhaka",
+    "upazila": "Savar",
+    "mouza": "Birulia",
+    "sheet_no": "07",
+    "dag_no": "601",
+    "khatian_no": "1205",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 4.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000004", "name": "Shabnam Akter", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.345,23.815],[90.346,23.815],[90.346,23.816],[90.345,23.816],[90.345,23.815]]]},
+    "khatian_area_decimal": 4.00,
+    "gis_area_decimal": 4.00,
+    "created_at": "2020-05-19",
+    "updated_at": "2023-10-30"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-SAV-000009",
+    "scenario_tag": "HASH-MISMATCH",
+    "district": "Dhaka",
+    "upazila": "Savar",
+    "mouza": "Birulia",
+    "sheet_no": "08",
+    "dag_no": "777",
+    "khatian_no": "1310",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 7.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000005", "name": "Imran Hossain", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.330,23.810],[90.331,23.810],[90.331,23.811],[90.330,23.811],[90.330,23.810]]]},
+    "khatian_area_decimal": 7.00,
+    "gis_area_decimal": 7.00,
+    "created_at": "2021-01-25",
+    "updated_at": "2024-06-01"
+  },
+  {
+    "parcel_id": "LG-BD-CTG-PAH-000010",
+    "scenario_tag": "CLEAN",
+    "district": "Chattogram",
+    "upazila": "Pahartali",
+    "mouza": "Bayezid",
+    "sheet_no": "09",
+    "dag_no": "111",
+    "khatian_no": "222",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 8.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000006", "name": "Sumaiya Akter", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[91.790,22.330],[91.791,22.330],[91.791,22.331],[91.790,22.331],[91.790,22.330]]]},
+    "khatian_area_decimal": 8.00,
+    "gis_area_decimal": 8.00,
+    "created_at": "2020-06-15",
+    "updated_at": "2024-02-28"
+  },
+  {
+    "parcel_id": "LG-BD-NAR-SON-000011",
+    "scenario_tag": "CLEAN",
+    "district": "Narayanganj",
+    "upazila": "Sonargaon",
+    "mouza": "Sonargaon",
+    "sheet_no": "10",
+    "dag_no": "55",
+    "khatian_no": "190",
+    "land_type": "AGRICULTURAL",
+    "area_decimal": 12.00,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000007", "name": "Mohammad Ali", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.600,23.650],[90.601,23.650],[90.601,23.651],[90.600,23.651],[90.600,23.650]]]},
+    "khatian_area_decimal": 12.00,
+    "gis_area_decimal": 12.00,
+    "created_at": "2019-11-11",
+    "updated_at": "2024-03-30"
+  },
+  {
+    "parcel_id": "LG-BD-DHK-GAZ-000012",
+    "scenario_tag": "CLEAN",
+    "district": "Dhaka",
+    "upazila": "Gazipur",
+    "mouza": "Sreepur",
+    "sheet_no": "11",
+    "dag_no": "23",
+    "khatian_no": "80",
+    "land_type": "RESIDENTIAL",
+    "area_decimal": 2.50,
+    "owner_references": [
+      {"identifier": "DEMO-ID-000008", "name": "Rezaul Karim", "share_percent": 100}
+    ],
+    "geometry_geojson": {"type": "Polygon", "coordinates": [[[90.450,24.050],[90.451,24.050],[90.451,24.051],[90.450,24.051],[90.450,24.050]]]},
+    "khatian_area_decimal": 2.50,
+    "gis_area_decimal": 2.50,
+    "created_at": "2021-09-09",
+    "updated_at": "2024-07-04"
+  }
+]

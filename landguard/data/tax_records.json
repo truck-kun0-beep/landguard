@@ -1,0 +1,17 @@
+[
+  {"tax_id": "TAX-000001", "parcel_id": "LG-BD-DHK-SAV-000001", "tax_year": 2023, "area_decimal": 10.00, "amount_due": 1250.00, "amount_paid": 1250.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000001"},
+  {"tax_id": "TAX-000002", "parcel_id": "LG-BD-DHK-SAV-000001", "tax_year": 2024, "area_decimal": 10.00, "amount_due": 1250.00, "amount_paid": 1250.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000001"},
+  {"tax_id": "TAX-000003", "parcel_id": "LG-BD-DHK-SAV-000002", "tax_year": 2023, "area_decimal": 5.00, "amount_due": 625.00, "amount_paid": 625.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000003"},
+  {"tax_id": "TAX-000004", "parcel_id": "LG-BD-DHK-SAV-000002", "tax_year": 2024, "area_decimal": 5.00, "amount_due": 625.00, "amount_paid": 625.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000003"},
+  {"tax_id": "TAX-000005", "parcel_id": "LG-BD-DHK-SAV-000003", "tax_year": 2024, "area_decimal": 3.50, "amount_due": 437.50, "amount_paid": 437.50, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000010"},
+  {"tax_id": "TAX-000006", "parcel_id": "LG-BD-DHK-GAZ-000004", "tax_year": 2023, "area_decimal": 10.00, "amount_due": 1250.00, "amount_paid": 1250.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000001"},
+  {"tax_id": "TAX-000007", "parcel_id": "LG-BD-DHK-GAZ-000004", "tax_year": 2024, "area_decimal": 10.00, "amount_due": 1250.00, "amount_paid": 1250.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000001"},
+  {"tax_id": "TAX-000008", "parcel_id": "LG-BD-DHK-NAR-000005", "tax_year": 2023, "area_decimal": 6.00, "amount_due": 750.00, "amount_paid": 750.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000001"},
+  {"tax_id": "TAX-000009", "parcel_id": "LG-BD-CTG-PAH-000006", "tax_year": 2023, "area_decimal": 10.00, "amount_due": 1000.00, "amount_paid": 1000.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000001"},
+  {"tax_id": "TAX-000010", "parcel_id": "LG-BD-DHK-GAZ-000007", "tax_year": 2023, "area_decimal": 10.00, "amount_due": 1250.00, "amount_paid": 1250.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000003"},
+  {"tax_id": "TAX-000011", "parcel_id": "LG-BD-CHI-SAV-000008", "tax_year": 2023, "area_decimal": 4.00, "amount_due": 500.00, "amount_paid": 500.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000004"},
+  {"tax_id": "TAX-000012", "parcel_id": "LG-BD-DHK-SAV-000009", "tax_year": 2024, "area_decimal": 7.00, "amount_due": 875.00, "amount_paid": 875.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000005"},
+  {"tax_id": "TAX-000013", "parcel_id": "LG-BD-CTG-PAH-000010", "tax_year": 2023, "area_decimal": 8.00, "amount_due": 800.00, "amount_paid": 800.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000006"},
+  {"tax_id": "TAX-000014", "parcel_id": "LG-BD-NAR-SON-000011", "tax_year": 2023, "area_decimal": 12.00, "amount_due": 1200.00, "amount_paid": 1200.00, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000007"},
+  {"tax_id": "TAX-000015", "parcel_id": "LG-BD-DHK-GAZ-000012", "tax_year": 2024, "area_decimal": 2.50, "amount_due": 312.50, "amount_paid": 312.50, "status": "PAID", "recorded_owner_reference": "DEMO-ID-000008"}
+]
