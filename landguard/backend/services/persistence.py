@@ -13,6 +13,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from .. import database
+from .audit import append_event as chain_append_event
 from .verification.types import VerificationResult
 
 
@@ -53,25 +54,21 @@ def record_audit_event(
     parcel_id: str,
     event_type: str,
     payload: dict,
+    *,
+    actor: str = "landguard-prototype",
 ) -> dict:
-    """Append a new audit event."""
-    existing = database.audit_events.all()
-    seq = len(existing) + 1
-    event = {
-        "event_id": f"EVT-{seq:05d}",
-        "seq": seq,
-        "parcel_id": parcel_id,
-        "event_type": event_type,
-        "actor_reference": "landguard-prototype",
-        "payload": payload,
-        "timestamp": _now_iso(),
-        # Chain fields are placeholders until Milestone 04 builds the
-        # cryptographic chain.
-        "previous_event_hash": None,
-        "current_event_hash": None,
-    }
-    database.audit_events.save(existing + [event])
-    return event
+    """Append a new audit event through the cryptographic chain.
+
+    All callers (verification, transfer creation, future tooling) go
+    through this function, so the chain is maintained in exactly one
+    place.
+    """
+    return chain_append_event(
+        event_type=event_type,
+        parcel_id=parcel_id,
+        actor=actor,
+        payload=payload,
+    )
 
 
 def latest_result_for(parcel_id: str) -> dict | None:

@@ -27,6 +27,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from . import database
 from .services import evidence_service, persistence
+from .services.audit import verify_chain as verify_audit_chain
 from .services.verification import VerificationEngine
 
 app = FastAPI(title="LandGuard API", version="0.1.0")
@@ -189,13 +190,40 @@ def create_transfer(payload: dict[str, Any]) -> dict[str, Any]:
 def integrity() -> dict[str, Any]:
     """Inspect the persisted audit log + verification records.
 
-    NOTE: this is the lightweight integrity view for the verification
-    findings store. The tamper-evident hash chain over audit events is
-    Milestone 04's job.
+    Audit chain integrity is exposed in detail by `/api/audit/verify`;
+    this endpoint is a lightweight summary.
     """
     audits = database.audit_events.all()
     verifications = database.verification_records.all()
+    chain = verify_audit_chain()
     return {
         "audit_events": {"count": len(audits)},
         "verification_records": {"count": len(verifications)},
+        "audit_chain": chain,
     }
+
+
+@app.get("/api/audit")
+def list_audit() -> list[dict[str, Any]]:
+    """Return every audit event in sequence order."""
+    return sorted(
+        database.audit_events.all(),
+        key=lambda e: e.get("sequence_number", e.get("seq", 0)),
+    )
+
+
+@app.get("/api/audit/verify")
+def audit_verify() -> dict[str, Any]:
+    """Walk the audit chain and independently recompute every hash."""
+    return verify_audit_chain()
+
+
+@app.get("/api/parcels/{parcel_id}/audit")
+def parcel_audit(parcel_id: str) -> list[dict[str, Any]]:
+    """Return only the audit events that reference this parcel."""
+    if not database.find_parcel(parcel_id):
+        raise HTTPException(status_code=404, detail="Parcel not found")
+    return sorted(
+        [e for e in database.audit_events.all() if e.get("parcel_id") == parcel_id],
+        key=lambda e: e.get("sequence_number", e.get("seq", 0)),
+    )
