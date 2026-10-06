@@ -2,12 +2,84 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>LandGuard — Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LANDGUARD — Dashboard</title>
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
   </head>
   <body>
-    <h1>Dashboard</h1>
-    <p>Risk panel, recent transfers, integrity status. TBD.</p>
+    <div id="nav"></div>
+
+    <div class="page">
+      <div class="page-header">
+        <div>
+          <div class="breadcrumb">Overview</div>
+          <h1>Verification dashboard</h1>
+          <p>System-wide status across all 12 seeded parcels and the cryptographic audit chain.</p>
+        </div>
+        <div>
+          <span id="chainBadge"></span>
+        </div>
+      </div>
+
+      <section class="grid cols-4" id="metrics">
+        <div class="metric neutral"><div class="label">Total Parcels</div><div class="value" id="m-total">—</div><div class="meta">in this prototype</div></div>
+        <div class="metric ok"><div class="label">Verified</div><div class="value" id="m-verified">—</div><div class="meta">no conflicts detected</div></div>
+        <div class="metric warn"><div class="label">Review Required</div><div class="value" id="m-review">—</div><div class="meta">incomplete evidence</div></div>
+        <div class="metric bad"><div class="label">Conflict Detected</div><div class="value" id="m-conflict">—</div><div class="meta">strong contradiction</div></div>
+      </section>
+
+      <section class="grid cols-2" style="margin-top:16px;">
+        <div class="section">
+          <h2>Chain integrity</h2>
+          <p class="subtle">Live state of the cryptographic audit chain that protects every verification event.</p>
+          <div id="chainPanel"></div>
+        </div>
+        <div class="section">
+          <h2>Recent audit events</h2>
+          <p class="subtle">Newest first. Click a parcel to open its Land Passport.</p>
+          <div id="recentAudit"></div>
+        </div>
+      </section>
+
+      <section class="section" style="margin-top:16px;">
+        <div class="row between" style="margin-bottom:8px;">
+          <div>
+            <h2 style="margin-bottom:0;">Parcel map</h2>
+            <p class="subtle" style="margin-bottom:0;">Synthetic demo geometry — click any polygon to open its Land Passport.</p>
+          </div>
+          <div>
+            <a class="btn secondary" href="verify.html">Open Search</a>
+          </div>
+        </div>
+        <div id="map" class="map" style="height:420px;"></div>
+      </section>
+
+      <section class="section" style="margin-top:16px;">
+        <div class="row between">
+          <div>
+            <h2 style="margin-bottom:0;">All parcels</h2>
+            <p class="subtle" style="margin-bottom:0;">Verification status reflects the latest run for each parcel.</p>
+          </div>
+          <a class="btn secondary" href="verify.html">Search / Filter →</a>
+        </div>
+        <div id="parcelList" style="margin-top:14px;"></div>
+      </section>
+    </div>
+
+    <script src="js/layout.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/map.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
     <script src="js/dashboard.js"></script>
+    <script>
+      LandGuardLayout.el("nav").innerHTML = LandGuardLayout.render("dashboard");
+      LandGuardDashboard.boot();
+    </script>
   </body>
 </html>

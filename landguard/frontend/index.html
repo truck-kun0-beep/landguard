@@ -2,12 +2,82 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>LandGuard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LANDGUARD — Cryptographic Land Verification &amp; Fraud Detection</title>
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
-    <h1>LandGuard</h1>
-    <p>Public landing — links to verify, dashboard, and parcel lookup.</p>
-    <script src="js/main.js"></script>
+    <div id="nav"></div>
+
+    <div class="page">
+      <div class="page-header">
+        <div>
+          <div class="breadcrumb">Bangladesh</div>
+          <h1>Cryptographic land verification for Bangladesh</h1>
+          <p>
+            LANDGUARD correlates deeds, mutations, tax records, and GIS geometry for any parcel,
+            runs a transparent rule-based verification engine, and protects every action with a
+            tamper-evident audit chain.
+          </p>
+        </div>
+        <div>
+          <a class="btn" href="dashboard.html">Open Dashboard →</a>
+          <a class="btn secondary" href="verify.html">Verify a Parcel</a>
+        </div>
+      </div>
+
+      <div class="grid cols-3">
+        <section class="section">
+          <h2>1 · Search</h2>
+          <p class="subtle">Look up any parcel by ID, district, or upazila.</p>
+          <a class="btn secondary" href="verify.html">Open Search →</a>
+        </section>
+        <section class="section">
+          <h2>2 · Inspect</h2>
+          <p class="subtle">Land Passport with ownership, documents, transactions, mutations, tax, GIS.</p>
+          <a class="btn secondary" href="dashboard.html">Browse Parcels →</a>
+        </section>
+        <section class="section">
+          <h2>3 · Verify</h2>
+          <p class="subtle">Deterministic rule engine — explainable findings, never AI.</p>
+          <a class="btn secondary" href="dashboard.html">Run Verification →</a>
+        </section>
+      </div>
+
+      <section class="section" style="margin-top:16px;">
+        <h2>What LANDGUARD does and does not do</h2>
+        <p class="subtle">Wording is intentional.</p>
+        <div class="grid cols-2">
+          <div>
+            <h3 style="color:var(--ok);">Does</h3>
+            <ul>
+              <li>Detects <b>potential inconsistencies</b> between records.</li>
+              <li>Produces <b>explainable findings</b> with evidence references.</li>
+              <li>Flags missing evidence (e.g. missing mutation record).</li>
+              <li>Maintains a <b>tamper-evident hash chain</b> of every verification.</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="color:var(--bad);">Does not</h3>
+            <ul>
+              <li>Declare anyone the <b>legal owner</b>.</li>
+              <li>Call a transaction <b>legally fraudulent</b>.</li>
+              <li>Connect to real Bangladesh government databases in this prototype.</li>
+              <li>Use AI / ML / LLMs to score risk.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <p class="footnote">
+        Prototype data only. Parcel IDs, owner references, deed numbers, and coordinates are
+        synthetic and clearly labelled. Nothing on this dashboard constitutes a legal record.
+      </p>
+    </div>
+
+    <script src="js/layout.js"></script>
+    <script>
+      LandGuardLayout.el("nav").innerHTML = LandGuardLayout.render("home");
+    </script>
   </body>
 </html>

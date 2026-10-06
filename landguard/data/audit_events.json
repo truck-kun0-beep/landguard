@@ -5,73 +5,12 @@
     "event_type": "VERIFICATION_COMPLETED",
     "parcel_id": "LG-BD-DHK-SAV-000001",
     "actor": "landguard-prototype",
-    "timestamp": "2026-10-06T05:22:36+00:00",
+    "timestamp": "2026-10-06T05:44:31+00:00",
     "payload": {
       "overall_status": "VERIFIED",
-      "risk_score": 0,
-      "risk_level": "LOW",
-      "finding_count": 7,
-      "rule_codes": [
-        "OWNER_MATCH",
-        "AREA_MATCH",
-        "DEED_MUTATION_AREA_MATCH",
-        "PARCEL_AREA_OVERFLOW",
-        "DUPLICATE_TRANSFER",
-        "MISSING_MUTATION",
-        "DOCUMENT_INTEGRITY"
-      ]
+      "risk_score": 0
     },
     "previous_event_hash": "0000000000000000000000000000000000000000000000000000000000000000",
-    "current_event_hash": "46a05a180f53cf9fcf180947a7c6b40977e056c1c189f67f0e799adbc14b7b0d"
-  },
-  {
-    "event_id": "EVT-00002",
-    "sequence_number": 2,
-    "event_type": "VERIFICATION_COMPLETED",
-    "parcel_id": "LG-BD-DHK-GAZ-000004",
-    "actor": "landguard-prototype",
-    "timestamp": "2026-10-06T05:22:36+00:00",
-    "payload": {
-      "overall_status": "FORGED",
-      "risk_score": 35,
-      "risk_level": "MODERATE",
-      "finding_count": 7,
-      "rule_codes": [
-        "OWNER_MATCH",
-        "AREA_MATCH",
-        "DEED_MUTATION_AREA_MATCH",
-        "PARCEL_AREA_OVERFLOW",
-        "DUPLICATE_TRANSFER",
-        "MISSING_MUTATION",
-        "DOCUMENT_INTEGRITY"
-      ]
-    },
-    "previous_event_hash": "46a05a180f53cf9fcf180947a7c6b40977e056c1c189f67f0e799adbc14b7b0d",
-    "current_event_hash": "1bc035d77dcb866ad3a06564d7eebfbe3fd54054662a67cc341f5379e60c094a"
-  },
-  {
-    "event_id": "EVT-00003",
-    "sequence_number": 3,
-    "event_type": "VERIFICATION_COMPLETED",
-    "parcel_id": "LG-BD-DHK-NAR-000005",
-    "actor": "landguard-prototype",
-    "timestamp": "2026-10-06T05:22:36+00:00",
-    "payload": {
-      "overall_status": "CONFLICT_DETECTED",
-      "risk_score": 50,
-      "risk_level": "HIGH",
-      "finding_count": 7,
-      "rule_codes": [
-        "OWNER_MATCH",
-        "AREA_MATCH",
-        "DEED_MUTATION_AREA_MATCH",
-        "PARCEL_AREA_OVERFLOW",
-        "DUPLICATE_TRANSFER",
-        "MISSING_MUTATION",
-        "DOCUMENT_INTEGRITY"
-      ]
-    },
-    "previous_event_hash": "1bc035d77dcb866ad3a06564d7eebfbe3fd54054662a67cc341f5379e60c094a",
-    "current_event_hash": "70b28047536db4a4044410ee53291f02f8ed53eec61d3f818337cb967ff06d26"
+    "current_event_hash": "2daa9bcadf08725c17e0d405f5059e84fde3731bceb64431b0dd4209fbd7387a"
   }
 ]
