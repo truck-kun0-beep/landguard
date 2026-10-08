@@ -52,7 +52,22 @@ class JsonStore:
             tmp = self.path.with_suffix(self.path.suffix + ".tmp")
             with tmp.open("w", encoding="utf-8") as f:
                 json.dump(records, f, indent=2, ensure_ascii=False)
-            tmp.replace(self.path)
+            # On Windows, antivirus / indexer services occasionally hold
+            # a brief handle on the target file. os.replace is atomic
+            # when it works, but it surfaces a WinError 5 immediately.
+            # A short retry loop absorbs that flake without changing the
+            # semantics: each attempt is still an atomic rename.
+            last_err: Exception | None = None
+            for attempt in range(5):
+                try:
+                    tmp.replace(self.path)
+                    break
+                except PermissionError as e:
+                    last_err = e
+                    import time as _t
+                    _t.sleep(0.05 * (attempt + 1))
+            else:
+                raise last_err or RuntimeError("save: atomic rename failed")
             self._cache = list(records)
 
 

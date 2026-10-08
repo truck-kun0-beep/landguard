@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>LANDGUARD — Land Passport</title>
+    <title>LANDGUARD &mdash; Land Passport</title>
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -21,7 +21,7 @@
             <h1>Parcel not found</h1>
             <p id="parcelNotFoundMsg"></p>
           </div>
-          <a class="btn secondary" href="verify.html">← Back to Search</a>
+          <a class="btn secondary" href="verify.html">&larr; Back to Search</a>
         </div>
       </div>
 
@@ -29,23 +29,34 @@
         <div class="page-header">
           <div>
             <div class="breadcrumb">
-              <a href="dashboard.html">Dashboard</a> &nbsp;›&nbsp;
-              <a href="verify.html">Search</a> &nbsp;›&nbsp;
+              <a href="dashboard.html">Dashboard</a> &nbsp;&rsaquo;&nbsp;
+              <a href="verify.html">Search</a> &nbsp;&rsaquo;&nbsp;
               Land Passport
             </div>
-            <h1 id="parcelId">—</h1>
-            <p id="parcelSubtitle">—</p>
+            <h1 id="parcelId">&mdash;</h1>
+            <p id="parcelSubtitle">&mdash;</p>
           </div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <button class="btn" id="runVerifyBtn" type="button">
-              <span class="btn-label">▶ Run Verification</span>
+              <span class="btn-label">&#9654; Run Verification</span>
             </button>
-            <a class="btn secondary" href="verify.html">← Back to Search</a>
+            <a class="btn secondary" href="verify.html">&larr; Back to Search</a>
           </div>
         </div>
 
+        <!-- Status banner: the headline -->
         <section id="statusBanner"></section>
 
+        <!-- Verification summary card -->
+        <section class="section" id="verificationSummary">
+          <div class="row between" style="margin-bottom:6px;">
+            <h2 style="margin-bottom:0;">Verification result</h2>
+            <span id="verificationMeta"></span>
+          </div>
+          <div id="verificationHeadline"></div>
+        </section>
+
+        <!-- Parcel identity + Map side by side -->
         <section class="grid cols-2">
           <div class="section">
             <h2>Parcel identity</h2>
@@ -53,36 +64,55 @@
             <div class="identity-grid" id="identityGrid"></div>
           </div>
           <div class="section">
-            <h2>Location (synthetic demo geometry)</h2>
-            <p class="subtle">Polygon coordinates are placeholders for demo purposes only.</p>
+            <h2>Location</h2>
+            <p class="subtle">
+              Synthetic demo geometry &mdash; polygon coordinates are
+              placeholders, not cadastral survey data.
+            </p>
             <div id="map" class="map"></div>
           </div>
         </section>
 
+        <!-- Ownership -->
         <section class="section" style="margin-top:16px;">
           <h2>Ownership</h2>
-          <p class="subtle">Multiple owners are normal; co-ownership is not flagged as suspicious.</p>
+          <p class="subtle">
+            Multiple owners are normal; co-ownership is not flagged
+            as suspicious.
+          </p>
           <div id="ownershipList" class="ownership-list"></div>
         </section>
 
+        <!-- Findings + evidence breakdown -->
         <section class="section" style="margin-top:16px;">
           <h2>Verification findings</h2>
-          <p class="subtle">Findings are produced by the deterministic rule engine. Each finding carries its own evidence.</p>
+          <p class="subtle">
+            Produced by the deterministic rule engine. Each finding
+            carries its own evidence.
+          </p>
           <div id="findings" class="findings"></div>
         </section>
 
         <section class="section" style="margin-top:16px;">
           <h2>Evidence behind each finding</h2>
-          <p class="subtle">For every non-passing rule, the underlying records that triggered it.</p>
+          <p class="subtle">
+            For every non-passing rule, the underlying records that
+            triggered it.
+          </p>
           <div id="evidenceBreakdown"></div>
         </section>
 
+        <!-- Documents -->
         <section class="section" style="margin-top:16px;">
           <h2>Documents</h2>
-          <p class="subtle">Deeds and other registered evidence. Document hashes are recomputed and checked against stored values.</p>
+          <p class="subtle">
+            Deeds and other registered evidence. Document hashes are
+            recomputed and checked against stored values.
+          </p>
           <div id="documents"></div>
         </section>
 
+        <!-- Transactions + Mutations -->
         <section class="grid cols-2" style="margin-top:16px;">
           <div class="section">
             <h2>Transactions</h2>
@@ -96,26 +126,28 @@
           </div>
         </section>
 
+        <!-- Tax -->
         <section class="section" style="margin-top:16px;">
           <h2>Land tax</h2>
           <p class="subtle">Land development tax records from the synthetic dataset.</p>
           <div id="tax"></div>
         </section>
 
+        <!-- Audit chain + trail -->
         <section class="section" style="margin-top:16px;">
-          <div class="row between">
-            <div>
-              <h2 style="margin-bottom:0;">Audit trail</h2>
-              <p class="subtle" style="margin-bottom:0;">Every verification is appended to a tamper-evident hash chain.</p>
-            </div>
-            <span id="auditChainBadge"></span>
-          </div>
+          <h2>Audit trail</h2>
+          <p class="subtle">
+            Every verification event is appended to a tamper-evident
+            hash chain.
+          </p>
+          <div id="auditChainCard"></div>
           <div id="auditTrail" style="margin-top:14px;"></div>
         </section>
 
         <p class="footnote">
-          Prototype data only. LANDGUARD reports potential inconsistencies; it does not make legal
-          determinations of ownership or fraud.
+          Prototype data only. LANDGUARD reports potential
+          inconsistencies; it does not make legal determinations of
+          ownership or fraud.
         </p>
       </div>
     </div>

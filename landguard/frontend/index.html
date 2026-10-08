@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>LANDGUARD — Cryptographic Land Verification &amp; Fraud Detection</title>
+    <title>LANDGUARD — Digital Land Verification &amp; Integrity Platform</title>
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
@@ -12,67 +12,128 @@
     <div class="page">
       <div class="page-header">
         <div>
-          <div class="breadcrumb">Bangladesh</div>
-          <h1>Cryptographic land verification for Bangladesh</h1>
-          <p>
-            LANDGUARD correlates deeds, mutations, tax records, and GIS geometry for any parcel,
-            runs a transparent rule-based verification engine, and protects every action with a
-            tamper-evident audit chain.
+          <div class="breadcrumb">Bangladesh &middot; Prototype</div>
+          <h1>Land titles, verified before they transfer.</h1>
+          <p style="max-width:60ch;">
+            LANDGUARD is a parcel-centric verification layer that correlates
+            multiple land records, detects inconsistencies before a transfer
+            proceeds, and protects every action with a tamper-evident audit trail.
+          </p>
+          <p style="margin-top:18px;">
+            <a class="btn" href="dashboard.html">Explore Demo</a>
+            <a class="btn secondary" href="verify.html">Verify a Parcel</a>
           </p>
         </div>
-        <div>
-          <a class="btn" href="dashboard.html">Open Dashboard →</a>
-          <a class="btn secondary" href="verify.html">Verify a Parcel</a>
-        </div>
       </div>
 
-      <div class="grid cols-3">
-        <section class="section">
-          <h2>1 · Search</h2>
-          <p class="subtle">Look up any parcel by ID, district, or upazila.</p>
-          <a class="btn secondary" href="verify.html">Open Search →</a>
-        </section>
-        <section class="section">
-          <h2>2 · Inspect</h2>
-          <p class="subtle">Land Passport with ownership, documents, transactions, mutations, tax, GIS.</p>
-          <a class="btn secondary" href="dashboard.html">Browse Parcels →</a>
-        </section>
-        <section class="section">
-          <h2>3 · Verify</h2>
-          <p class="subtle">Deterministic rule engine — explainable findings, never AI.</p>
-          <a class="btn secondary" href="dashboard.html">Run Verification →</a>
-        </section>
-      </div>
-
-      <section class="section" style="margin-top:16px;">
-        <h2>What LANDGUARD does and does not do</h2>
-        <p class="subtle">Wording is intentional.</p>
+      <section class="section">
+        <h2>What is LANDGUARD?</h2>
+        <p class="subtle">A short product briefing.</p>
         <div class="grid cols-2">
           <div>
-            <h3 style="color:var(--ok);">Does</h3>
-            <ul>
-              <li>Detects <b>potential inconsistencies</b> between records.</li>
-              <li>Produces <b>explainable findings</b> with evidence references.</li>
-              <li>Flags missing evidence (e.g. missing mutation record).</li>
-              <li>Maintains a <b>tamper-evident hash chain</b> of every verification.</li>
-            </ul>
+            <h3>The problem</h3>
+            <p>
+              Land records in Bangladesh live in many places — deeds,
+              mutations, land-tax rolls, and Khatian registers — maintained
+              by different authorities, often in isolation. Discrepancies
+              between these records are a major source of fraud, double
+              transfers, and contested ownership.
+            </p>
           </div>
           <div>
-            <h3 style="color:var(--bad);">Does not</h3>
+            <h3>The solution</h3>
+            <p>
+              LANDGUARD treats the <b>parcel</b> as the central entity and
+              collects evidence from every relevant record. A deterministic
+              rule engine compares them, producing explainable findings.
+              Every verification event is sealed into a tamper-evident
+              audit chain.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="margin-top:16px;">
+        <h2>How it works</h2>
+        <p class="subtle">A simple, transparent pipeline.</p>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-num">1</div>
+            <div class="flow-title">Land records</div>
+            <div class="flow-sub">Deeds, mutations, tax receipts, Khatian.</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">2</div>
+            <div class="flow-title">Multi-source evidence</div>
+            <div class="flow-sub">Adapters gather evidence per parcel.</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">3</div>
+            <div class="flow-title">Deterministic verification</div>
+            <div class="flow-sub">Rule engine produces findings.</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">4</div>
+            <div class="flow-title">Risk screening</div>
+            <div class="flow-sub">Transparent score + status.</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">5</div>
+            <div class="flow-title">Tamper-evident audit</div>
+            <div class="flow-sub">SHA-256 chain over every event.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="margin-top:16px;">
+        <h2>What LANDGUARD does &mdash; and does not &mdash; claim</h2>
+        <p class="subtle">The wording is intentional.</p>
+        <div class="grid cols-2">
+          <div class="claims-card ok-card">
+            <h3 class="ok-h">Reports</h3>
             <ul>
-              <li>Declare anyone the <b>legal owner</b>.</li>
-              <li>Call a transaction <b>legally fraudulent</b>.</li>
-              <li>Connect to real Bangladesh government databases in this prototype.</li>
-              <li>Use AI / ML / LLMs to score risk.</li>
+              <li>Potential inconsistencies between records.</li>
+              <li>Missing evidence (e.g. no mutation for a transfer).</li>
+              <li>Owner, area, and document-hash mismatches.</li>
+              <li>Duplicate or overflowing active transfers.</li>
+              <li>Tampering of the audit chain.</li>
+            </ul>
+          </div>
+          <div class="claims-card bad-card">
+            <h3 class="bad-h">Does not claim</h3>
+            <ul>
+              <li>A legal determination of who owns the land.</li>
+              <li>That a transaction is legally fraudulent.</li>
+              <li>Real cadastral surveying of physical boundaries.</li>
+              <li>Live access to government databases.</li>
+              <li>AI/ML adjudication of risk.</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <p class="footnote">
-        Prototype data only. Parcel IDs, owner references, deed numbers, and coordinates are
-        synthetic and clearly labelled. Nothing on this dashboard constitutes a legal record.
-      </p>
+      <section class="section" style="margin-top:16px;">
+        <h2>About this prototype</h2>
+        <p>
+          LANDGUARD is a student hackathon prototype. The records shown in the
+          demo are <b>synthetic</b>: synthetic Bangladesh-style parcel identifiers,
+          synthetic owner references (DEMO-ID-NNNN), synthetic deed numbers,
+          synthetic geometry, and simulated adapters. The shape of the system
+          is the deliverable &mdash; not the dataset.
+        </p>
+        <p>
+          The audit chain is real cryptographic code (SHA-256, deterministic
+          canonicalization, hash linkage), and the verification engine is real
+          deterministic logic &mdash; only the inputs are synthetic.
+        </p>
+        <p style="margin-top:18px;">
+          <a class="btn" href="dashboard.html">Open the Demo</a>
+        </p>
+      </section>
     </div>
 
     <script src="js/layout.js"></script>

@@ -2,8 +2,10 @@
 // Pulls parcel + verification + evidence + audit and renders the passport.
 
 const LandGuardParcel = (() => {
-  const { esc, statusPill, findingPill, fmtDate, shortHash, setHTML, setText, banner, empty, el } =
-    LandGuardLayout;
+  const {
+    esc, statusPill, findingPill, fmtDate, shortHash, setHTML, setText,
+    banner, empty, el, chainCard, auditRow,
+  } = LandGuardLayout;
   const api = LandGuard;
 
   function getParcelIdFromUrl() {
@@ -19,29 +21,31 @@ const LandGuardParcel = (() => {
 
   function renderIdentity(parcel) {
     const items = [
-      { label: "Parcel ID", value: parcel.parcel_id },
-      { label: "District", value: parcel.district || "—" },
-      { label: "Upazila", value: parcel.upazila || "—" },
-      { label: "Mouza", value: parcel.mouza || "—" },
-      { label: "Sheet", value: parcel.sheet_no || "—" },
-      { label: "Dag / Plot", value: parcel.dag_no || "—" },
-      { label: "Khatian", value: parcel.khatian_no || "—" },
-      { label: "Land Type", value: parcel.land_type || "—" },
+      { label: "Parcel ID",     value: parcel.parcel_id },
+      { label: "District",      value: parcel.district || "—" },
+      { label: "Upazila",       value: parcel.upazila || "—" },
+      { label: "Mouza",         value: parcel.mouza || "—" },
+      { label: "Sheet",         value: parcel.sheet_no || "—" },
+      { label: "Dag / Plot",    value: parcel.dag_no || "—" },
+      { label: "Khatian",       value: parcel.khatian_no || "—" },
+      { label: "Land Type",     value: parcel.land_type || "—" },
       { label: "Area (decimal)", value: parcel.area_decimal },
-      { label: "Khatian area", value: parcel.khatian_area_decimal ?? "—" },
-      { label: "GIS area", value: parcel.gis_area_decimal ?? "—" },
-      { label: "Created", value: parcel.created_at || "—" },
+      { label: "Khatian area",  value: parcel.khatian_area_decimal ?? "—" },
+      { label: "GIS area",      value: parcel.gis_area_decimal ?? "—" },
+      { label: "Created",       value: parcel.created_at || "—" },
     ];
-    const html = items
-      .map(
-        (it) => `
+    setHTML(
+      "identityGrid",
+      items
+        .map(
+          (it) => `
         <div class="item">
           <div class="label">${esc(it.label)}</div>
           <div class="value">${esc(it.value)}</div>
         </div>`
-      )
-      .join("");
-    setHTML("identityGrid", html);
+        )
+        .join("")
+    );
   }
 
   function renderOwnership(parcel) {
@@ -50,10 +54,12 @@ const LandGuardParcel = (() => {
       setHTML("ownershipList", empty("No ownership records."));
       return;
     }
-    const html = owners
-      .map((o) => {
-        const pct = Number(o.share_percent || 0);
-        return `
+    setHTML(
+      "ownershipList",
+      owners
+        .map((o) => {
+          const pct = Number(o.share_percent || 0);
+          return `
           <div class="ownership-row">
             <div style="min-width:160px;">
               <div class="name">${esc(o.name || "Unknown")}</div>
@@ -63,9 +69,9 @@ const LandGuardParcel = (() => {
             <div class="pct">${pct}%</div>
           </div>
         `;
-      })
-      .join("");
-    setHTML("ownershipList", html);
+        })
+        .join("")
+    );
   }
 
   function renderMap(parcel, verifications) {
@@ -80,7 +86,7 @@ const LandGuardParcel = (() => {
         "statusBanner",
         banner(
           "info",
-          "ℹ",
+          "i",
           "No verification recorded yet",
           `<div>Click <b>Run Verification</b> to evaluate this parcel against all evidence.</div>`
         )
@@ -95,11 +101,9 @@ const LandGuardParcel = (() => {
         "statusBanner",
         banner(
           "ok",
-          "✓",
-          "Verified — no material contradictions detected",
-          `<div>LANDGUARD VERIFICATION RISK SCORE: <b>${esc(score)}</b> · <b>${esc(level)}</b> · ${esc(
-            verifications.finding_count
-          )} finding(s). This indicates the available evidence sources are mutually consistent. It is not a legal determination.</div>`
+          "\u2713",
+          "VERIFIED",
+          `<div>No inconsistencies detected across configured evidence checks. Risk score: <b>${esc(score)}</b> &middot; level: <b>${esc(level)}</b>. This is a screening result &mdash; not a legal determination.</div>`
         )
       );
     } else if (overall === "REVIEW_REQUIRED") {
@@ -108,10 +112,8 @@ const LandGuardParcel = (() => {
         banner(
           "warn",
           "!",
-          "Review required — evidence is incomplete or contains moderate concerns",
-          `<div>LANDGUARD VERIFICATION RISK SCORE: <b>${esc(score)}</b> · <b>${esc(level)}</b> · ${esc(
-            verifications.finding_count
-          )} finding(s). A human reviewer should examine the relevant records.</div>`
+          "REVIEW REQUIRED",
+          `<div>Evidence is incomplete or contains moderate concerns. Risk score: <b>${esc(score)}</b> &middot; level: <b>${esc(level)}</b>. A human reviewer should examine the relevant records.</div>`
         )
       );
     } else {
@@ -119,14 +121,52 @@ const LandGuardParcel = (() => {
         "statusBanner",
         banner(
           "bad",
-          "✕",
-          "Conflict detected — strong contradiction between records",
-          `<div>LANDGUARD VERIFICATION RISK SCORE: <b>${esc(score)}</b> · <b>${esc(level)}</b> · ${esc(
-            verifications.finding_count
-          )} finding(s). This does <b>not</b> constitute a legal fraud determination; it indicates the records describing this parcel disagree in a way that warrants investigation.</div>`
+          "\u2715",
+          "CONFLICT DETECTED",
+          `<div>Strong contradiction between records describing this parcel. Risk score: <b>${esc(score)}</b> &middot; level: <b>${esc(level)}</b>. This indicates the records disagree in a way that warrants investigation; it does not constitute a legal fraud determination.</div>`
         )
       );
     }
+  }
+
+  function renderVerificationHeadline(parcel, verifications) {
+    if (!verifications) {
+      setHTML("verificationHeadline", empty("Run verification to see the headline result."));
+      setHTML("verificationMeta", "");
+      return;
+    }
+    const score = verifications.risk_score;
+    const level = verifications.risk_level;
+    const findings = verifications.finding_count;
+    const pass = verifications.findings.filter((f) => f.status === "PASS").length;
+    const warn = verifications.findings.filter((f) => f.status === "WARNING").length;
+    const fail = verifications.findings.filter((f) => f.status === "FAIL").length;
+    setHTML(
+      "verificationMeta",
+      `<span class="pill ${verifications.overall_status === "VERIFIED" ? "ok" : verifications.overall_status === "REVIEW_REQUIRED" ? "warn" : "bad"}"><span class="dot"></span>${esc(verifications.overall_status.replace("_", " "))}</span>`
+    );
+    setHTML(
+      "verificationHeadline",
+      `
+        <div class="grid cols-3">
+          <div class="metric neutral">
+            <div class="label">LANDGUARD Risk Score</div>
+            <div class="value">${esc(score)}</div>
+            <div class="meta">${esc(verifications.risk_label || "LANDGUARD VERIFICATION RISK SCORE")}</div>
+          </div>
+          <div class="metric ${verifications.overall_status === "VERIFIED" ? "ok" : verifications.overall_status === "REVIEW_REQUIRED" ? "warn" : "bad"}">
+            <div class="label">Risk Level</div>
+            <div class="value">${esc(level)}</div>
+            <div class="meta">${esc(findings)} rule(s) evaluated</div>
+          </div>
+          <div class="metric neutral">
+            <div class="label">Findings</div>
+            <div class="value">${esc(pass)} / ${esc(warn)} / ${esc(fail)}</div>
+            <div class="meta">PASS &middot; WARNING &middot; FAIL</div>
+          </div>
+        </div>
+      `
+    );
   }
 
   function renderFindings(verifications) {
@@ -135,10 +175,12 @@ const LandGuardParcel = (() => {
       return;
     }
     const findings = verifications.findings;
-    const html = findings
-      .map((f) => {
-        const cls = f.status === "FAIL" ? "fail" : f.status === "WARNING" ? "warn" : "ok";
-        return `
+    setHTML(
+      "findings",
+      findings
+        .map((f) => {
+          const cls = f.status === "FAIL" ? "fail" : f.status === "WARNING" ? "warn" : "ok";
+          return `
           <div class="finding ${cls}">
             <div class="finding-header">
               <span class="code">${esc(f.rule_code)}</span>
@@ -147,9 +189,9 @@ const LandGuardParcel = (() => {
             <div class="message">${esc(f.message)}</div>
           </div>
         `;
-      })
-      .join("");
-    setHTML("findings", html);
+        })
+        .join("")
+    );
   }
 
   function renderEvidenceBreakdown(parcelId, verifications) {
@@ -161,25 +203,28 @@ const LandGuardParcel = (() => {
     if (!interesting.length) {
       setHTML(
         "evidenceBreakdown",
-        `<div class="notice"><b>✓</b> All rule findings passed — no contradicting evidence to display.</div>`
+        `<div class="notice"><b>\u2713</b> All rule findings passed &mdash; no contradicting evidence to display.</div>`
       );
       return;
     }
-    const html = interesting
-      .map((f) => {
-        const refs = (f.evidence_reference || [])
-          .map((r) => {
-            const fieldsJson = JSON.stringify(r.fields || {}, null, 2);
-            return `
+    setHTML(
+      "evidenceBreakdown",
+      interesting
+        .map((f) => {
+          const refs = (f.evidence_reference || [])
+            .map((r) => {
+              const fieldsJson = JSON.stringify(r.fields || {}, null, 2);
+              return `
               <div class="evidence-item">
-                <div class="source">${esc(r.source)} · ${esc(r.record_type)} · ${esc(r.reference)}</div>
+                <div class="source">${esc(r.source)} &middot; ${esc(r.record_type)} &middot; ${esc(r.reference)}</div>
                 <pre>${esc(fieldsJson)}</pre>
               </div>
             `;
-          })
-          .join("");
-        return `
-          <div class="finding ${f.status === "FAIL" ? "fail" : "warn"}">
+            })
+            .join("");
+          const cls = f.status === "FAIL" ? "fail" : "warn";
+          return `
+          <div class="finding ${cls}">
             <div class="finding-header">
               <span class="code">${esc(f.rule_code)}</span>
               ${findingPill(f.status, f.severity)}
@@ -188,9 +233,9 @@ const LandGuardParcel = (() => {
             <div class="evidence-list">${refs || `<div class="muted">No evidence attached.</div>`}</div>
           </div>
         `;
-      })
-      .join("");
-    setHTML("evidenceBreakdown", html);
+        })
+        .join("")
+    );
   }
 
   function renderDocuments(documents) {
@@ -198,7 +243,9 @@ const LandGuardParcel = (() => {
       setHTML("documents", empty("No documents recorded."));
       return;
     }
-    const html = `
+    setHTML(
+      "documents",
+      `
       <div class="table-wrap">
         <table>
           <thead>
@@ -217,7 +264,7 @@ const LandGuardParcel = (() => {
                 const shortHash = d.document_hash
                   ? d.document_hash === "0".repeat(64)
                     ? "—"
-                    : `${d.document_hash.slice(0, 10)}…${d.document_hash.slice(-10)}`
+                    : `${d.document_hash.slice(0, 10)}\u2026${d.document_hash.slice(-10)}`
                   : "—";
                 return `
                   <tr>
@@ -234,8 +281,8 @@ const LandGuardParcel = (() => {
           </tbody>
         </table>
       </div>
-    `;
-    setHTML("documents", html);
+    `
+    );
   }
 
   function renderTransactions(transactions) {
@@ -386,42 +433,20 @@ const LandGuardParcel = (() => {
       return;
     }
 
-    setHTML(
-      "auditChainBadge",
-      chain.valid
-        ? `<span class="pill ok"><span class="dot"></span>AUDIT CHAIN VALID</span>`
-        : `<span class="pill bad"><span class="dot"></span>AUDIT CHAIN INVALID</span>`
-    );
+    setHTML("auditChainCard", chainCard(chain));
 
     if (!events.length) {
       setHTML("auditTrail", empty("No audit events for this parcel yet."));
       return;
     }
-
-    const html = events
-      .slice()
-      .reverse()
-      .map(
-        (ev) => `
-        <div class="audit-row">
-          <div class="seq">#${ev.sequence_number ?? ev.seq ?? "?"}</div>
-          <div>
-            <div><b>${esc(ev.event_type)}</b> <span class="muted">·</span> <span class="muted">${esc(
-              ev.timestamp
-            )}</span></div>
-            <div class="muted" style="font-size:12px; margin-top:2px;">Actor: ${esc(
-              ev.actor || ev.actor_reference || "—"
-            )}</div>
-            <div class="hash">
-              <div><b>previous:</b> <span>${esc(shortHash(ev.previous_event_hash))}</span></div>
-              <div><b>current:</b> <span>${esc(shortHash(ev.current_event_hash))}</span></div>
-            </div>
-          </div>
-        </div>
-      `
-      )
-      .join("");
-    setHTML("auditTrail", html);
+    setHTML(
+      "auditTrail",
+      events
+        .slice()
+        .reverse()
+        .map(auditRow)
+        .join("")
+    );
   }
 
   async function refreshAll(parcelId) {
@@ -450,6 +475,7 @@ const LandGuardParcel = (() => {
     renderIdentity(parcel);
     renderOwnership(parcel);
     renderStatusBanner(parcel, verifications);
+    renderVerificationHeadline(parcel, verifications);
     renderMap(parcel, verifications);
     renderFindings(verifications);
     renderEvidenceBreakdown(parcelId, verifications);

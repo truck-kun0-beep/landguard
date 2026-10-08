@@ -3,9 +3,30 @@
 // and renders the dashboard.
 
 const LandGuardDashboard = (() => {
-  const { esc, statusPill, shortHash, fmtDate, setHTML, setText, banner, empty } =
-    LandGuardLayout;
+  const {
+    esc, statusPill, setHTML, setText, banner, empty, chainCard, auditRow,
+    scenarioCard,
+  } = LandGuardLayout;
   const api = LandGuard;
+
+  // The seven demo scenarios. Labels are identifiers, not scenario
+  // tags &mdash; the engine determines the outcome from real evidence.
+  const SCENARIOS = [
+    { name: "CLEAN",            id: "LG-BD-DHK-SAV-000001",
+      desc: "Co-owned parcel; all evidence aligned." },
+    { name: "AREA MISMATCH",    id: "LG-BD-DHK-GAZ-000004",
+      desc: "Deed transferred area disagrees with mutation area." },
+    { name: "OWNER MISMATCH",   id: "LG-BD-DHK-NAR-000005",
+      desc: "Deed names a seller not supported by ownership evidence." },
+    { name: "DOUBLE TRANSFER",  id: "LG-BD-CTG-PAH-000006",
+      desc: "Two approved transfers selling the same area to different buyers." },
+    { name: "AREA OVERFLOW",    id: "LG-BD-DHK-GAZ-000007",
+      desc: "Sum of active transfers exceeds the parcel area." },
+    { name: "MISSING MUTATION", id: "LG-BD-CHI-SAV-000008",
+      desc: "A transfer exists with no corresponding mutation record." },
+    { name: "DOCUMENT HASH MISMATCH", id: "LG-BD-DHK-SAV-000009",
+      desc: "A registered deed's stored hash disagrees with the recomputed SHA-256." },
+  ];
 
   function statusFor(parcelId, results) {
     const r = results[parcelId];
@@ -18,8 +39,21 @@ const LandGuardDashboard = (() => {
     try {
       parcels = await api.listParcels();
     } catch (e) {
-      setHTML("metrics",
-        `<div class="section">Failed to load parcels: ${esc(e.message)}</div>`);
+      const isNetwork = !e.status;
+      setHTML(
+        "metrics",
+        `<div class="section">
+          <b>Could not reach the backend API.</b><br>
+          <span class="muted">${esc(e.message)}</span><br><br>
+          Run this command from the <code>landguard/</code> directory and open
+          <a href="http://127.0.0.1:8000/frontend/dashboard.html">
+          http://127.0.0.1:8000/frontend/dashboard.html</a>:<br>
+          <pre>python -m uvicorn serve_frontend:app --port 8000</pre>
+          ${isNetwork
+            ? "If you opened the HTML file directly, the browser cannot reach localhost from a file:// URL."
+            : "If you opened the page from a different server, the API and the page must be on the same host."}
+        </div>`
+      );
       return;
     }
 
@@ -49,33 +83,25 @@ const LandGuardDashboard = (() => {
     setText("m-review", review);
     setText("m-conflict", conflict);
 
+    // Scenarios.
+    setHTML(
+      "scenarios",
+      SCENARIOS.map((s) =>
+        scenarioCard(
+          s.name,
+          s.id,
+          s.desc +
+            (results[s.id]?.overall_status
+              ? ` &mdash; latest: ${statusPill(results[s.id].overall_status)}`
+              : "")
+        )
+      ).join("")
+    );
+
     // Audit chain status.
     try {
       const chain = await api.getAuditVerify();
-      setHTML(
-        "chainBadge",
-        chain.valid
-          ? `<span class="pill ok"><span class="dot"></span>AUDIT CHAIN VALID</span>`
-          : `<span class="pill bad"><span class="dot"></span>AUDIT CHAIN INVALID</span>`
-      );
-      setHTML(
-        "chainPanel",
-        chain.valid
-          ? banner(
-              "ok",
-              "✓",
-              "Audit chain valid",
-              `<div>${chain.event_count} event(s). Every hash independently recomputed and linked.</div>`
-            )
-          : banner(
-              "bad",
-              "✕",
-              "Audit chain invalid",
-              `<div>${esc(chain.error || "Unknown")}. First invalid sequence: <code>${esc(
-                chain.first_invalid_sequence ?? "?"
-              )}</code>.</div>`
-            )
-      );
+      setHTML("chainPanel", chainCard(chain));
     } catch (e) {
       setHTML("chainPanel", banner("warn", "!", "Audit chain unreachable", esc(e.message)));
     }
@@ -87,23 +113,7 @@ const LandGuardDashboard = (() => {
       if (!recent.length) {
         setHTML("recentAudit", empty("No audit events yet. Run a verification to populate the chain."));
       } else {
-        const html = recent
-          .map((ev) => {
-            const parcel = ev.parcel_id
-              ? `<a href="parcel.html?id=${encodeURIComponent(ev.parcel_id)}">${esc(ev.parcel_id)}</a>`
-              : `<span class="muted">—</span>`;
-            return `
-              <div class="audit-row">
-                <div class="seq">#${ev.sequence_number ?? ev.seq ?? "?"}</div>
-                <div>
-                  <div><b>${esc(ev.event_type)}</b> · ${parcel}</div>
-                  <div class="muted" style="font-size:12px;">${esc(ev.timestamp)} · actor: ${esc(ev.actor || ev.actor_reference || "—")}</div>
-                </div>
-              </div>
-            `;
-          })
-          .join("");
-        setHTML("recentAudit", `<div>${html}</div>`);
+        setHTML("recentAudit", recent.map(auditRow).join(""));
       }
     } catch (e) {
       setHTML("recentAudit", empty("Failed to load audit log."));

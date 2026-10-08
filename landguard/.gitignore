@@ -1,0 +1,64 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache/
+
+# ---------- Virtual environments ----------
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# ---------- Editor / OS ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+*.code-workspace
+
+# ---------- Local-only probes, logs, scratch ----------
+*.log
+*.tmp
+*.bak
+*.bak.*
+*.old
+*_audit.txt
+baseline_*.txt
+pytest_*.txt
+probe_*.ps1
+scratch_*.py
+TODO_*.md
+
+# ---------- Local server / port files ----------
+*.pid
+.server.port
+
+# ---------- Data runtime artefacts ----------
+# These two files are mutated by /api/parcels/{id}/verify at runtime.
+# We track the initial canonical version but ignore local runtime state
+# so demos don't accidentally commit a half-verified chain.
+# Recreate empty with `python -m backend.reset`.
+data/audit_events.json
+data/verification_records.json
+
+# ---------- Frontend build / node (none today, but for future) ----------
+node_modules/
+.parcel-cache/
+dist/
+.vite/

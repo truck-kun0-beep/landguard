@@ -47,6 +47,11 @@ const LandGuardLayout = (() => {
             </span>
           </div>
           <nav class="navlinks">${navHtml}</nav>
+          <button class="theme-toggle" type="button" id="themeToggle"
+                  aria-label="Toggle dark mode" title="Toggle dark mode">
+            <span class="ico" aria-hidden="true">◐</span>
+            <span class="lbl">Theme</span>
+          </button>
         </div>
       </header>
     `;
@@ -103,8 +108,129 @@ const LandGuardLayout = (() => {
   function setHTML(id, html) { const n = el(id); if (n) n.innerHTML = html; }
   function setText(id, text) { const n = el(id); if (n) n.textContent = text; }
 
+  function chainCard(result) {
+    const ok = !!result.valid;
+    const glyph = ok ? "\u2713" : "\u2715";
+    const headTitle = ok ? "CHAIN VALID" : "CHAIN INVALID";
+    return `
+      <div class="audit-chain-card ${ok ? "ok" : "bad"}">
+        <div>
+          <div class="label">Cryptographic audit chain</div>
+          <div class="value">${glyph} ${headTitle}</div>
+          <div class="desc">
+            ${esc(result.event_count)} event(s) verified.
+            ${ok
+              ? "Every stored hash independently recomputed from the chain and matches."
+              : `First invalid sequence: <code>${esc(result.first_invalid_sequence ?? "?")}</code>. ${esc(result.error || "")}`}
+          </div>
+        </div>
+        <div>
+          <a class="btn secondary" href="verify.html">Inspect Parcels</a>
+        </div>
+      </div>
+      <div class="notice">
+        <b>Note</b>
+        Each event carries a SHA-256 hash linked to the previous one.
+        Changing an earlier event invalidates every subsequent hash.
+      </div>
+    `;
+  }
+
+  function auditRow(ev) {
+    const seq = ev.sequence_number ?? ev.seq ?? "?";
+    const eventType = ev.event_type || "UNKNOWN";
+    const ts = ev.timestamp || "-";
+    const actor = ev.actor || ev.actor_reference || "-";
+    const prev = ev.previous_event_hash || "";
+    const cur = ev.current_event_hash || "";
+    const prevFull = prev || "(none)";
+    const curFull = cur || "(none)";
+    const prevShort = shortHash(prev);
+    const curShort = shortHash(cur);
+    return `
+      <div class="audit-row">
+        <div class="seq">#${esc(String(seq))}</div>
+        <div>
+          <div><b>${esc(eventType)}</b>
+            <span class="muted">&middot;</span>
+            <span class="muted">${esc(ts)}</span>
+          </div>
+          <div class="muted" style="font-size:12px; margin-top:2px;">Actor: ${esc(actor)}</div>
+          <div class="hash">
+            <div><b>previous:</b> <span class="mono">${esc(prevShort)}</span></div>
+            <div><b>current:</b> <span class="mono">${esc(curShort)}</span></div>
+            <details class="hash-details">
+              <summary>Show full hashes</summary>
+              <pre>previous: ${esc(prevFull)}\ncurrent:  ${esc(curFull)}</pre>
+            </details>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function scenarioCard(name, parcelId, descriptionHtml) {
+    // name + parcelId are user-controlled text, always escape them.
+    // descriptionHtml is a short HTML fragment built by the dashboard
+    // (e.g. an inline status pill) and is rendered as trusted HTML.
+    return `
+      <div class="scenario-card" onclick="window.location='parcel.html?id=${encodeURIComponent(parcelId)}'">
+        <div class="name">${esc(name)}</div>
+        <div class="desc">${descriptionHtml}</div>
+        <div class="id mono">${esc(parcelId)}</div>
+      </div>
+    `;
+  }
+
+  // ---------- Theme (light / dark / system) ----------
+
+  const _THEME_KEY = "landguard:theme"; // "light" | "dark" | "auto"
+
+  function _applyTheme(mode) {
+    const root = document.documentElement;
+    if (mode === "dark") {
+      root.setAttribute("data-theme", "dark");
+    } else if (mode === "light") {
+      root.setAttribute("data-theme", "light");
+    } else {
+      // Auto / system: clear explicit theme so media query takes over.
+      root.removeAttribute("data-theme");
+    }
+    // Reflect in the toggle button if it's mounted.
+    const btn = document.getElementById("themeToggle");
+    if (btn) {
+      const next = mode === "light" ? "dark" : mode === "dark" ? "auto" : "light";
+      btn.setAttribute("data-next", next);
+      const lbl = btn.querySelector(".lbl");
+      if (lbl) {
+        lbl.textContent = `Theme: ${mode === "auto" ? "auto" : mode}`;
+      }
+    }
+  }
+
+  function _initTheme() {
+    let stored = null;
+    try { stored = localStorage.getItem(_THEME_KEY); } catch (_) { /* private mode */ }
+    if (stored !== "light" && stored !== "dark" && stored !== "auto") stored = "auto";
+    _applyTheme(stored);
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("#themeToggle");
+      if (!btn) return;
+      const next = btn.getAttribute("data-next") || "dark";
+      try { localStorage.setItem(_THEME_KEY, next); } catch (_) { /* ignore */ }
+      _applyTheme(next);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", _initTheme);
+  } else {
+    _initTheme();
+  }
+
   return {
     render, esc, statusPill, findingPill, fmtDate, shortHash, banner, empty, el, setHTML, setText,
+    chainCard, auditRow, scenarioCard,
   };
 })();
 
