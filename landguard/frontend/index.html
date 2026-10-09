@@ -4,26 +4,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>LANDGUARD — Digital Land Verification &amp; Integrity Platform</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/theme.css" />
   </head>
   <body>
     <div id="nav"></div>
 
     <div class="page">
-      <div class="page-header">
-        <div>
-          <div class="breadcrumb">Bangladesh &middot; Prototype</div>
-          <h1>Land titles, verified before they transfer.</h1>
-          <p style="max-width:60ch;">
-            LANDGUARD is a parcel-centric verification layer that correlates
-            multiple land records, detects inconsistencies before a transfer
-            proceeds, and protects every action with a tamper-evident audit trail.
-          </p>
-          <p style="margin-top:18px;">
-            <a class="btn" href="dashboard.html">Explore Demo</a>
-            <a class="btn secondary" href="verify.html">Verify a Parcel</a>
-          </p>
-        </div>
+      <section class="hero">
+  <div>
+    <div class="hero-eyebrow"><i></i>Bangladesh &middot; Prototype</div>
+    <h1>Land titles, <em>verified</em> before they transfer.</h1>
+    <p class="lead">
+      LANDGUARD correlates every land record for a parcel, flags
+      inconsistencies before a transfer proceeds, and seals every
+      action into a tamper-evident audit trail.
+    </p>
+    <div class="hero-cta">
+      <a class="btn" href="dashboard.html">Explore Demo &rarr;</a>
+      <a class="btn secondary" href="verify.html">Verify a Parcel</a>
+    </div>
+  </div>
+
+  <div class="hero-art" aria-hidden="true">
+    <div class="art-top">
+      <span>LG-BD-DHK-SAV-000001</span>
+      <span class="pill bad"><span class="dot"></span>Conflict</span>
+    </div>
+    <svg class="art-map" viewBox="0 0 400 240">
+      <path class="p1" d="M30 60 L170 30 L220 110 L120 170 L40 140Z"/>
+      <path class="p2" d="M180 25 L330 50 L350 140 L235 112Z"/>
+      <path class="p3" d="M125 178 L238 118 L340 150 L300 215 L150 220Z"/>
+      <rect class="scan" x="0" y="0" width="400" height="3"/>
+    </svg>
+    <div class="art-chain"><i></i><i></i><i></i><i></i></div>
+    <div class="art-hash">sha256 &middot; 9f2c&hellip;e41a &rarr; linked</div>
+  </div>
+</section>
       </div>
 
       <section class="section">
@@ -140,5 +161,6 @@
     <script>
       LandGuardLayout.el("nav").innerHTML = LandGuardLayout.render("home");
     </script>
+    <script src="js/fx.js"></script>
   </body>
 </html>

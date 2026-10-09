@@ -18,6 +18,22 @@ const LandGuardLayout = (() => {
     { id: "verify", label: "Verify", href: "verify.html" },
   ];
 
+  // Logo + home-link paths. Pages are served at /frontend/*.html by the
+  // bundled server, so /logo/landguard.jpg resolves correctly there. If
+  // someone has moved the frontend elsewhere, they can override via
+  // window.LANDGUARD_LOGO_SRC before this script runs.
+  function logoSrc(_active) {
+    if (window.LANDGUARD_LOGO_SRC) return window.LANDGUARD_LOGO_SRC;
+    return "logo/landguard.jpg";
+  }
+  function homeHref(active) {
+    // On the home page, the brand "Home" link should scroll to top
+    // instead of reloading. We use a fragment (#) and intercept the
+    // click in the boot-time listener below.
+    if (active === "home") return "#top";
+    return "index.html";
+  }
+
   function render(active, breadcrumb) {
     const navHtml = NAV.map((n) => {
       const cls = n.id === active ? "active" : "";
@@ -39,13 +55,15 @@ const LandGuardLayout = (() => {
     return `
       <header class="topnav">
         <div class="topnav-inner">
-          <div class="brand">
-            <span class="mark">LG</span>
-            <span>
+          <a class="brand brand-home" href="${homeHref(active)}" id="brandHome"
+             title="Home" aria-label="LANDGUARD home">
+            <img class="brand-logo" src="${esc(logoSrc(active))}"
+                 alt="LANDGUARD" />
+            <span class="brand-name">
               LANDGUARD
               <small>Cryptographic Land Verification &amp; Fraud Detection — Bangladesh</small>
             </span>
-          </div>
+          </a>
           <nav class="navlinks">${navHtml}</nav>
           <button class="theme-toggle" type="button" id="themeToggle"
                   aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -222,10 +240,33 @@ const LandGuardLayout = (() => {
     });
   }
 
+  // ---------- Brand "Home" button (logo + name) ----------
+  // On any page, clicking the brand navigates home. On the home page
+  // itself (#top), we smooth-scroll to the top instead of reloading.
+
+  function _initBrand() {
+    const brand = document.getElementById("brandHome");
+    if (!brand) return;
+    brand.addEventListener("click", (e) => {
+      const href = brand.getAttribute("href") || "";
+      if (href === "#top" || href.endsWith("#top")) {
+        e.preventDefault();
+        // Smooth scroll if supported, else instant.
+        try {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (_) {
+          window.scrollTo(0, 0);
+        }
+      }
+    });
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", _initTheme);
+    document.addEventListener("DOMContentLoaded", _initBrand);
   } else {
     _initTheme();
+    _initBrand();
   }
 
   return {

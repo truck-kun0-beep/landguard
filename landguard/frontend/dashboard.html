@@ -4,7 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>LANDGUARD — Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -23,7 +28,10 @@
             cryptographic audit chain.
           </p>
         </div>
-        <div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn" type="button" id="refreshBtn">
+            <span class="btn-label">&#x21bb; Refresh</span>
+          </button>
           <a class="btn secondary" href="verify.html">Open Search &rarr;</a>
         </div>
       </div>
@@ -111,5 +119,6 @@
       LandGuardLayout.el("nav").innerHTML = LandGuardLayout.render("dashboard");
       LandGuardDashboard.boot();
     </script>
+    <script src="js/fx.js"></script>
   </body>
 </html>

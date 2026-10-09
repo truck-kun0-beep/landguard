@@ -150,18 +150,20 @@ const LandGuardParcel = (() => {
       `
         <div class="grid cols-3">
           <div class="metric neutral">
-            <div class="label">LANDGUARD Risk Score</div>
-            <div class="value">${esc(score)}</div>
-            <div class="meta">${esc(verifications.risk_label || "LANDGUARD VERIFICATION RISK SCORE")}</div>
+            <div class="label">Risk score</div>
+            <div class="value">${esc(score)}<span class="value-unit">/100</span></div>
+            <div class="meta">
+              ${score === 0 ? "No rule deducted points" : score < 30 ? "Low concern" : score < 70 ? "Elevated concern" : "Strong contradiction"}
+            </div>
           </div>
           <div class="metric ${verifications.overall_status === "VERIFIED" ? "ok" : verifications.overall_status === "REVIEW_REQUIRED" ? "warn" : "bad"}">
-            <div class="label">Risk Level</div>
+            <div class="label">Risk level</div>
             <div class="value">${esc(level)}</div>
             <div class="meta">${esc(findings)} rule(s) evaluated</div>
           </div>
           <div class="metric neutral">
             <div class="label">Findings</div>
-            <div class="value">${esc(pass)} / ${esc(warn)} / ${esc(fail)}</div>
+            <div class="value"><span class="badge-ok">${pass}</span> <span class="badge-warn">${warn}</span> <span class="badge-fail">${fail}</span></div>
             <div class="meta">PASS &middot; WARNING &middot; FAIL</div>
           </div>
         </div>
@@ -207,21 +209,92 @@ const LandGuardParcel = (() => {
       );
       return;
     }
+
+    // Pretty labels so non-technical viewers can read the evidence.
+    const FIELD_LABELS = {
+      parcel_area_decimal: "Parcel area",
+      khatian_area_decimal: "Khatian area",
+      gis_area_decimal: "GIS area",
+      transferred_area_decimal: "Transferred area",
+      from_owner_reference: "From owner",
+      to_owner_reference: "To owner",
+      previous_owner_reference: "Previous owner",
+      new_owner_reference: "New owner",
+      recorded_owner_reference: "Recorded owner",
+      status: "Status",
+      transaction_date: "Transaction date",
+      application_date: "Application date",
+      approval_date: "Approval date",
+      matched: "Matched",
+      stored_hash: "Stored hash",
+      calculated_hash: "Calculated hash",
+      seller_reference: "Seller",
+      buyer_reference: "Buyer",
+      doc_id: "Document ID",
+      parcel_id: "Parcel",
+      tampered_documents: "Tampered documents",
+    };
+
+    const SOURCE_LABELS = {
+      MOCK_REGISTRATION: "Registration",
+      MOCK_MUTATION: "Mutation",
+      MOCK_TAX: "Land tax",
+      MOCK_KHATIAN: "Khatian",
+      MOCK_GIS: "GIS",
+      KHATIAN: "Khatian",
+      PARCEL: "Parcel",
+    };
+
+    function renderEvidenceItem(r) {
+      const fields = r.fields || {};
+      const sourceLabel = SOURCE_LABELS[r.source] || r.source;
+      const recordLabel = r.record_type ? r.record_type.charAt(0) + r.record_type.slice(1).toLowerCase() : "Record";
+      const headerLine = `${sourceLabel} &middot; ${recordLabel} &middot; <code>${esc(r.reference || "")}</code>`;
+
+      const entries = Object.entries(fields).filter(([k]) => k !== "owners");
+      const rows = entries
+        .map(([k, v]) => {
+          let display;
+          if (Array.isArray(v)) display = v.length ? v.join(", ") : "(empty)";
+          else if (v === null || v === undefined) display = "&mdash;";
+          else if (typeof v === "object") display = JSON.stringify(v);
+          else display = String(v);
+          const label = FIELD_LABELS[k] || k.replace(/_/g, " ");
+          return `<dt>${esc(label)}</dt><dd>${display}</dd>`;
+        })
+        .join("");
+
+      // Owners array gets its own compact list.
+      let ownersHtml = "";
+      if (Array.isArray(fields.owners) && fields.owners.length) {
+        ownersHtml = fields.owners
+          .map(
+            (o) =>
+              `<span class="owner-pill">${esc(o.name || "Unknown")} <span class="muted">${esc(o.identifier || "")}</span> &middot; ${esc(String(o.share_percent ?? "?"))}%</span>`
+          )
+          .join(" ");
+      }
+
+      const rawJson = JSON.stringify(fields, null, 2);
+
+      return `
+        <div class="evidence-item">
+          <div class="evidence-item-head">${headerLine}</div>
+          <dl class="evidence-fields">${rows}</dl>
+          ${ownersHtml ? `<div class="evidence-owners">${ownersHtml}</div>` : ""}
+          <details class="hash-details">
+            <summary>Show raw JSON</summary>
+            <pre>${esc(rawJson)}</pre>
+          </details>
+        </div>
+      `;
+    }
+
     setHTML(
       "evidenceBreakdown",
       interesting
         .map((f) => {
-          const refs = (f.evidence_reference || [])
-            .map((r) => {
-              const fieldsJson = JSON.stringify(r.fields || {}, null, 2);
-              return `
-              <div class="evidence-item">
-                <div class="source">${esc(r.source)} &middot; ${esc(r.record_type)} &middot; ${esc(r.reference)}</div>
-                <pre>${esc(fieldsJson)}</pre>
-              </div>
-            `;
-            })
-            .join("");
+          const refs = (f.evidence_reference || []).map(renderEvidenceItem).join("");
           const cls = f.status === "FAIL" ? "fail" : "warn";
           return `
           <div class="finding ${cls}">

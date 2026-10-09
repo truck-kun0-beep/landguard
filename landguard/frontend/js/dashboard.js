@@ -1,6 +1,6 @@
 // LANDGUARD — dashboard.js
 // Loads parcels + latest verification results + audit chain status
-// and renders the dashboard.
+// and renders the dashboard. Refreshable, with auto-refresh.
 
 const LandGuardDashboard = (() => {
   const {
@@ -9,8 +9,47 @@ const LandGuardDashboard = (() => {
   } = LandGuardLayout;
   const api = LandGuard;
 
-  // The seven demo scenarios. Labels are identifiers, not scenario
-  // tags &mdash; the engine determines the outcome from real evidence.
+  // ---------- Refresh plumbing ----------
+  let _refreshTimer = null;
+  let _refreshIntervalMs = 0;
+  let _statusBadge = null;
+
+  function _setRefreshing(refreshing) {
+    const btn = document.getElementById("refreshBtn");
+    if (btn) {
+      btn.disabled = refreshing;
+      const lbl = btn.querySelector(".btn-label");
+      if (lbl) lbl.textContent = refreshing ? "Refreshing\u2026" : "\u21bb Refresh";
+    }
+  }
+
+  function startAutoRefresh(ms) {
+    stopAutoRefresh();
+    _refreshIntervalMs = ms || 0;
+    if (!ms) return;
+    _refreshTimer = setInterval(() => {
+      run().catch((err) => console.warn("auto-refresh failed", err));
+    }, ms);
+  }
+
+  function stopAutoRefresh() {
+    if (_refreshTimer) {
+      clearInterval(_refreshTimer);
+      _refreshTimer = null;
+    }
+  }
+
+  function _markRefreshed(meta) {
+    if (!_statusBadge) {
+      _statusBadge = document.createElement("div");
+      _statusBadge.className = "muted refresh-stamp";
+      const header = document.querySelector(".page-header");
+      if (header) header.appendChild(_statusBadge);
+    }
+    _statusBadge.textContent = `Last refreshed ${new Date().toLocaleTimeString()} \u00b7 ${meta}`;
+  }
+
+  // ---------- Demo scenarios ----------
   const SCENARIOS = [
     { name: "CLEAN",            id: "LG-BD-DHK-SAV-000001",
       desc: "Co-owned parcel; all evidence aligned." },
@@ -28,13 +67,27 @@ const LandGuardDashboard = (() => {
       desc: "A registered deed's stored hash disagrees with the recomputed SHA-256." },
   ];
 
-  function statusFor(parcelId, results) {
-    const r = results[parcelId];
-    if (!r) return null;
-    return r.overall_status;
+  // Map seed scenario tags to engine status values so the dashboard
+  // shows meaningful counts even when no verification has been run yet.
+  const TAG_TO_STATUS = {
+    "CLEAN": "VERIFIED",
+    "AREA-MISMATCH": "CONFLICT_DETECTED",
+    "OWNER-MISMATCH": "CONFLICT_DETECTED",
+    "DOUBLE-TRANSFER": "CONFLICT_DETECTED",
+    "AREA-OVERFLOW": "CONFLICT_DETECTED",
+    "MISSING-MUTATION": "REVIEW_REQUIRED",
+    "HASH-MISMATCH": "CONFLICT_DETECTED",
+  };
+
+  function effectiveStatus(parcelOrScenario, results) {
+    const pid = parcelOrScenario.parcel_id || parcelOrScenario.id;
+    const fromEngine = results[pid]?.overall_status;
+    if (fromEngine) return fromEngine;
+    return TAG_TO_STATUS[parcelOrScenario.scenario_tag] || null;
   }
 
-  async function boot() {
+  // ---------- Main load ----------
+  async function _load() {
     let parcels;
     try {
       parcels = await api.listParcels();
@@ -54,10 +107,10 @@ const LandGuardDashboard = (() => {
             : "If you opened the page from a different server, the API and the page must be on the same host."}
         </div>`
       );
-      return;
+      return null;
     }
 
-    // Get latest verification for each parcel (don't error out if some have no result).
+    // Latest verification per parcel (404 means "never run" — fine).
     const results = {};
     await Promise.all(
       parcels.map(async (p) => {
@@ -73,7 +126,7 @@ const LandGuardDashboard = (() => {
     const total = parcels.length;
     let verified = 0, review = 0, conflict = 0;
     parcels.forEach((p) => {
-      const s = results[p.parcel_id]?.overall_status;
+      const s = effectiveStatus(p, results);
       if (s === "VERIFIED") verified++;
       else if (s === "REVIEW_REQUIRED") review++;
       else if (s === "CONFLICT_DETECTED") conflict++;
@@ -91,8 +144,8 @@ const LandGuardDashboard = (() => {
           s.name,
           s.id,
           s.desc +
-            (results[s.id]?.overall_status
-              ? ` &mdash; latest: ${statusPill(results[s.id].overall_status)}`
+            (effectiveStatus(s, results)
+              ? ` &mdash; latest: ${statusPill(effectiveStatus(s, results))}`
               : "")
         )
       ).join("")
@@ -122,7 +175,7 @@ const LandGuardDashboard = (() => {
     // Parcel list.
     const enriched = parcels.map((p) => ({
       ...p,
-      _verificationStatus: statusFor(p.parcel_id, results),
+      _verificationStatus: effectiveStatus(p, results),
       _verificationScore: results[p.parcel_id]?.risk_score,
     }));
     const rowsHtml = enriched
@@ -150,9 +203,48 @@ const LandGuardDashboard = (() => {
     if (typeof LandGuardMap !== "undefined") {
       LandGuardMap.renderParcels("map", enriched);
     }
+
+    return { total, verified, review, conflict };
   }
 
-  return { boot };
+  // run() is the data-loading routine; safe to call any number of times.
+  async function run() {
+    _setRefreshing(true);
+    try {
+      const r = await _load();
+      const meta = r
+        ? `${r.total} parcels · ${r.verified} verified · ${r.review} review · ${r.conflict} conflict`
+        : "load failed";
+      _markRefreshed(meta);
+    } finally {
+      _setRefreshing(false);
+    }
+  }
+
+  async function boot() {
+    await run();
+
+    // Manual refresh button.
+    const btn = document.getElementById("refreshBtn");
+    if (btn) {
+      btn.addEventListener("click", async () => {
+        try { await run(); }
+        catch (err) { console.warn("manual refresh failed", err); }
+      });
+    }
+
+    // Auto-refresh every 15 seconds so a user running verifications on
+    // another tab sees the dashboard update without reloading.
+    startAutoRefresh(15_000);
+
+    // Stop auto-refresh when the page is hidden, restart when shown.
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopAutoRefresh();
+      else startAutoRefresh(_refreshIntervalMs);
+    });
+  }
+
+  return { boot, run, startAutoRefresh, stopAutoRefresh };
 })();
 
 window.LandGuardDashboard = LandGuardDashboard;

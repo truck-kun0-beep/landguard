@@ -138,6 +138,23 @@ code, kbd, .mono { font-family: var(--mono); font-size: 0.92em; }
   font-size: 18px;
   letter-spacing: 0.2px;
 }
+.brand-home {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 4px 8px 4px 6px;
+  margin-left: -6px;
+  transition: background-color .15s ease;
+}
+.brand-home:hover {
+  background: var(--surface-2);
+  text-decoration: none;
+}
+.brand-home:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
 .brand .mark {
   width: 30px;
   height: 30px;
@@ -151,7 +168,24 @@ code, kbd, .mono { font-family: var(--mono); font-size: 0.92em; }
   font-size: 14px;
   box-shadow: var(--shadow);
 }
+/* The actual uploaded logo. Sized to fit the nav without crowding. */
+.brand .brand-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: var(--surface);
+  display: block;
+}
+.brand .brand-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
 .brand small { color: var(--ink-3); font-weight: 500; font-size: 12px; display: block; }
+
+/* Smooth-scroll behaviour for the in-page #top anchor. */
+html { scroll-behavior: smooth; }
 .navlinks { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
 .navlinks a {
   padding: 8px 14px;
@@ -310,10 +344,27 @@ code, kbd, .mono { font-family: var(--mono); font-size: 0.92em; }
   font-variant-numeric: tabular-nums;
 }
 .metric .meta { font-size: 12px; color: var(--ink-3); margin-top: 4px; }
+.metric .value-unit { font-size: 14px; color: var(--ink-3); font-weight: 500; margin-left: 4px; }
 .metric.ok { border-top: 3px solid var(--ok); }
 .metric.warn { border-top: 3px solid var(--warn); }
 .metric.bad { border-top: 3px solid var(--bad); }
 .metric.neutral { border-top: 3px solid var(--ink-3); }
+
+/* Per-status badges inside the "Findings" metric */
+.badge-ok, .badge-warn, .badge-fail {
+  display: inline-block;
+  min-width: 24px;
+  padding: 2px 6px;
+  margin-right: 2px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--border);
+}
+.badge-ok { background: var(--ok-soft); color: var(--ok); border-color: var(--ok); }
+.badge-warn { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+.badge-fail { background: var(--bad-soft); color: var(--bad); border-color: var(--bad); }
 
 /* ---------- Tables ---------- */
 
@@ -503,29 +554,84 @@ tr:hover td { background: var(--surface-2); }
 .finding-header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 6px; }
 .finding-header .code { font-family: var(--mono); font-weight: 600; color: var(--ink); font-size: 13px; }
 .finding .message { color: var(--ink); font-size: 14px; }
-.finding .evidence-list { margin-top: 10px; display: grid; gap: 6px; }
+.finding .evidence-list { margin-top: 12px; display: grid; gap: 10px; }
 .finding .evidence-item {
   border: 1px solid var(--border-soft);
   background: var(--surface);
-  border-radius: 4px;
-  padding: 8px 12px;
+  border-radius: var(--radius);
+  padding: 12px 14px;
   font-size: 13px;
+  color: var(--ink);
 }
-.finding .evidence-item .source {
+.finding .evidence-item .evidence-item-head {
   font-family: var(--mono);
   color: var(--brand-ink);
   font-size: 11px;
   text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+}
+.finding .evidence-item .evidence-item-head code {
+  font-family: var(--mono);
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ink);
+  font-size: 11px;
+}
+.finding .evidence-item dl.evidence-fields {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 14px;
+  row-gap: 4px;
+  margin: 0;
+}
+.finding .evidence-item dl.evidence-fields dt {
+  color: var(--ink-3);
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
   letter-spacing: 0.3px;
-  margin-bottom: 4px;
+}
+.finding .evidence-item dl.evidence-fields dd {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.finding .evidence-item .evidence-owners {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.finding .evidence-item .owner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid var(--brand);
+}
+.finding .evidence-item .owner-pill .muted {
+  color: var(--ink-3);
+  font-family: var(--mono);
+  font-size: 11px;
 }
 .finding .evidence-item pre {
-  margin: 0;
+  margin: 6px 0 0;
   font-family: var(--mono);
   font-size: 12px;
   color: var(--ink-2);
   white-space: pre-wrap;
   word-break: break-word;
+  background: var(--surface-2);
+  border: 1px solid var(--border-soft);
+  padding: 8px 12px;
+  border-radius: 4px;
 }
 
 /* ---------- Audit trail ---------- */
@@ -690,6 +796,13 @@ tr:hover td { background: var(--surface-2); }
   font-size: 12px;
   text-transform: uppercase;
   margin-bottom: 8px;
+}
+
+/* Stamped line under the page header — "Last refreshed HH:MM:SS · N parcels · ..." */
+.refresh-stamp {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-3);
 }
 
 /* ---------- Audit chain card ---------- */
