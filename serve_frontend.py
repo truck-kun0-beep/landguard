@@ -29,7 +29,7 @@ def _has_mount(prefix: str) -> bool:
     return False
 
 
-_NOCACHE = bool(os.environ.get("LANDGUARD_NOCACHE"))
+_NOCACHE = os.environ.get("LANDGUARD_NOCACHE", "1") != "0"
 
 
 class _NoCacheStaticFiles(StaticFiles):

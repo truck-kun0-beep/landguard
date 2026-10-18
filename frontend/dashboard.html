@@ -118,6 +118,8 @@
     <script>
       LandGuardLayout.el("nav").innerHTML = LandGuardLayout.render("dashboard");
       LandGuardDashboard.boot();
+      document.body.dataset.landguardBuild = "v2-fix-" + Date.now().toString(36);
+      console.log("LANDGUARD build:", document.body.dataset.landguardBuild);
     </script>
     <script src="js/fx.js"></script>
   </body>

@@ -131,10 +131,18 @@ const LandGuardDashboard = (() => {
       else if (s === "REVIEW_REQUIRED") review++;
       else if (s === "CONFLICT_DETECTED") conflict++;
     });
-    setText("m-total", total);
-    setText("m-verified", verified);
-    setText("m-review", review);
-    setText("m-conflict", conflict);
+    // Write metric values directly to the DOM. We bypass the setText
+    // helper here because the four metric cards are the most critical
+    // UI element on the page — they must update even if some other
+    // helper later has a bug.
+    const _set = (id, value) => {
+      const n = document.getElementById(id);
+      if (n) n.textContent = String(value);
+    };
+    _set("m-total", total);
+    _set("m-verified", verified);
+    _set("m-review", review);
+    _set("m-conflict", conflict);
 
     // Scenarios.
     setHTML(
